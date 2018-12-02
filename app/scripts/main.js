@@ -158,10 +158,9 @@ const init = function() {
           ga('send', 'event', 'spotify-dedup', 'saved-tracks-found-duplicates');
         }
         app.toProcess--;
-
         for (const playlistModel of app.playlists) {
           if (
-            playlistModel.playlist.name == 'Discover Weekly Archive' ||
+            // playlistModel.playlist.name == 'Discover Weekly Archive' ||
             playlistModel.playlist.name == 'Release Radar Archive'
           ) {
             if (playlistCache.needsCheckForDuplicates(playlistModel.playlist)) {
@@ -171,10 +170,12 @@ const init = function() {
                   api,
                   playlistModel.playlist
                 );
-                playlistModel.duplicates = PlaylistDeduplicator.findDuplicatedTracks(
-                  playlistTracks
+                console.log(playlistTracks.length);
+                playlistModel.duplicates = PlaylistDeduplicator.findSavedTracks(
+                  playlistTracks,
+                  savedTracks
                 );
-                console.log(playlistModel.duplicates);
+                console.log(playlistModel.duplicates.length);
                 if (playlistModel.duplicates.length === 0) {
                   playlistCache.storePlaylistWithoutDuplicates(
                     playlistModel.playlist

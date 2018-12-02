@@ -46,6 +46,34 @@ class BaseDeduplicator {
     }, []);
     return result;
   }
+
+  static findSavedTracks(playlistTracks, savedTracks) {
+    console.log(playlistTracks);
+    console.log(savedTracks);
+    const savedTrackIds = [];
+    savedTracks.forEach(el => {
+      savedTrackIds.push(el.id);
+    });
+    const result = playlistTracks.reduce((duplicates, track, index) => {
+      if (track === null) return duplicates;
+      if (track.id === null) return duplicates;
+      let isDuplicate = false;
+      if (track.id in savedTrackIds) {
+        console.log(track.id);
+        isDuplicate = true;
+      }
+      if (isDuplicate) {
+        duplicates.push({
+          index: index,
+          track: track,
+          reason: track.id in seenIds ? 'same-id' : 'same-name-artist',
+        });
+      }
+      return duplicates;
+    }, []);
+    console.log(result);
+    return result;
+  }
 }
 
 export class PlaylistDeduplicator extends BaseDeduplicator {

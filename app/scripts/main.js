@@ -160,32 +160,38 @@ const init = function() {
         app.toProcess--;
 
         for (const playlistModel of app.playlists) {
-          if (playlistCache.needsCheckForDuplicates(playlistModel.playlist)) {
-            let playlistTracks;
-            try {
-              playlistTracks = await PlaylistDeduplicator.getTracks(
-                api,
-                playlistModel.playlist
-              );
-              playlistModel.duplicates = PlaylistDeduplicator.findDuplicatedTracks(
-                playlistTracks
-              );
-              if (playlistModel.duplicates.length === 0) {
-                playlistCache.storePlaylistWithoutDuplicates(
+          if (
+            playlistModel.playlist.name == 'Discover Weekly Archive' ||
+            playlistModel.playlist.name == 'Release Radar Archive'
+          ) {
+            if (playlistCache.needsCheckForDuplicates(playlistModel.playlist)) {
+              let playlistTracks;
+              try {
+                playlistTracks = await PlaylistDeduplicator.getTracks(
+                  api,
                   playlistModel.playlist
                 );
+                playlistModel.duplicates = PlaylistDeduplicator.findDuplicatedTracks(
+                  playlistTracks
+                );
+                console.log(playlistModel.duplicates);
+                if (playlistModel.duplicates.length === 0) {
+                  playlistCache.storePlaylistWithoutDuplicates(
+                    playlistModel.playlist
+                  );
+                }
+                onPlaylistProcessed(playlistModel.playlist);
+              } catch (e) {
+                console.error(
+                  'There was an error fetching tracks for playlist',
+                  playlistModel.playlist,
+                  e
+                );
+                onPlaylistProcessed(playlistModel.playlist);
               }
-              onPlaylistProcessed(playlistModel.playlist);
-            } catch (e) {
-              console.error(
-                'There was an error fetching tracks for playlist',
-                playlistModel.playlist,
-                e
-              );
+            } else {
               onPlaylistProcessed(playlistModel.playlist);
             }
-          } else {
-            onPlaylistProcessed(playlistModel.playlist);
           }
         }
       }

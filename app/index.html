@@ -209,55 +209,7 @@
             </div>
           </div>
           <ul class="playlists-list">
-            <li
-              class="playlists-list-item media"
-              v-if="savedTracks.duplicates.length || savedTracks.status"
-            >
-              <div class="img">
-                <div
-                  class="playlists-list-item__placeholder playlists-list-item__img"
-                ></div>
-              </div>
-              <div class="bd">
-                <span class="playlists-list-item__name"
-                  >Saved songs in your library</span
-                >
-                <span v-if="savedTracks.status" class="label label-success">
-                  {{ savedTracks.status }}</span
-                >
-                <span v-if="savedTracks.duplicates.length">
-                  <span
-                    >This collection has
-                    {{ savedTracks.duplicates.length }} duplicated
-                    {{
-                      savedTracks.duplicates.length > 1 ? 'songs' : 'song'
-                    }}</span
-                  >
-                  <button
-                    class="btn btn-primary btn-sm playlist-list-item__btn"
-                    v-on:click="removeDuplicatesInSavedTracks()"
-                  >
-                    Remove duplicates from your saved songs
-                  </button>
-                  <ul class="duplicates">
-                    <li v-for="duplicate in savedTracks.duplicates">
-                      <span v-if="duplicate.reason === 'same-id'" class="badge"
-                        >Duplicate</span
-                      >
-                      <span
-                        v-if="duplicate.reason === 'same-name-artist'"
-                        class="badge"
-                        >Duplicate (same name, artist and duration)</span
-                      >
-                      <span>{{ duplicate.track.name }}</span>
-                      <span class="gray"> by </span>
-                      <span> {{ duplicate.track.artists[0].name }}</span>
-                    </li>
-                  </ul>
-                </span>
-              </div>
-            </li>
-            <li
+]            <li
               class="playlists-list-item media"
               v-for="playlist in playlists.filter(p => p.duplicates.length || p.status != '')"
             >
